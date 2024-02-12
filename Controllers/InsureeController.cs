@@ -1,19 +1,19 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using YourNamespace.Models;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Linq;
 
-public class InsureeController : Controller
+public class HomeController : Controller
 {
-    private readonly YourDbContext _context;
+    private readonly InsuranceContext _context;
 
-    public InsureeController(YourDbContext context)
+    public HomeController(InsuranceContext context)
     {
         _context = context;
     }
 
     public IActionResult Index()
     {
-        // Add any necessary logic for the Index action
         return View();
     }
 
@@ -31,9 +31,36 @@ public class InsureeController : Controller
         {
             decimal quote = 50;
 
-            // ... (add the quote calculation logic here)
+            if (insuree.Age <= 18)
+                quote += 100;
+            else if (insuree.Age >= 19 && insuree.Age <= 25)
+                quote += 50;
+            else
+                quote += 25;
+
+            if (insuree.CarYear < 2000)
+                quote += 25;
+            else if (insuree.CarYear > 2015)
+                quote += 25;
+
+            if (insuree.CarMake == "Porsche")
+            {
+                quote += 25;
+
+                if (insuree.CarModel == "911 Carrera")
+                    quote += 25;
+            }
+
+            quote += insuree.SpeedingTickets * 10;
+
+            if (insuree.HasDUI)
+                quote += quote * 0.25;
+
+            if (insuree.IsFullCoverage)
+                quote += quote * 0.5;
 
             insuree.Quote = quote;
+
             _context.Insurees.Add(insuree);
             _context.SaveChanges();
 
@@ -52,3 +79,4 @@ public class InsureeController : Controller
         return View(allQuotes);
     }
 }
+
