@@ -1,26 +1,24 @@
-﻿@model IEnumerable<YourNamespace.Insuree>
-
-@{
-    ViewBag.Title = "Admin";
-}
-
-<h2>Admin</h2>
+@model List<dynamic>
 
 <table class="table">
-    <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Quote</th>
-    </tr>
-
-    @foreach (var insuree in Model)
-    {
+    <thead>
         <tr>
-            <td>@insuree.FirstName</td>
-            <td>@insuree.LastName</td>
-            <td>@insuree.Email</td>
-            <td>@insuree.Quote</td>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Quote</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var quote in Model)
+        {
+            <tr>
+                <td>@quote.FirstName</td>
+                <td>@quote.LastName</td>
+                <td>@quote.Email</td>
+                <td>@quote.Quote</td>
+            </tr>
+        }
+    </tbody>
 </table>
+
