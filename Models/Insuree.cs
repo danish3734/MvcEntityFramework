@@ -1,9 +1,40 @@
-﻿public class Insuree
+﻿using System.ComponentModel.DataAnnotations;
+
+public class Insuree
 {
     public int Id { get; set; }
+
+    [Required]
     public string FirstName { get; set; }
+
+    [Required]
     public string LastName { get; set; }
-    public string Email { get; set; }
+
+    [Required]
+    public int Age { get; set; }
+
+    [Required]
+    public int CarYear { get; set; }
+
+    [Required]
+    public string CarMake { get; set; }
+
+    [Required]
+    public string CarModel { get; set; }
+
+    [Required]
+    public int SpeedingTickets { get; set; }
+
+    [Required]
+    public bool HasDUI { get; set; }
+
+    [Required]
+    public bool IsFullCoverage { get; set; }
+
     public decimal Quote { get; set; }
-    // Include other necessary properties
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 }
+
