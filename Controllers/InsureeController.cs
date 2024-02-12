@@ -1,47 +1,54 @@
-﻿using ASP.NET_MVC.Models;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using YourNamespace.Models;
 
-namespace ASP.NET_MVC.Controllers
+public class InsureeController : Controller
 {
-    public class InsureeController : Controller
+    private readonly YourDbContext _context;
+
+    public InsureeController(YourDbContext context)
     {
-        private readonly YourDbContext _dbContext;
-
-        public InsureeController(YourDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        // Other controller actions...
-
-        [HttpPost]
-        public ActionResult CalculateQuote(InsureeViewModel model)
-        {
-            decimal quote = CalculateInsuranceQuote(model); // Implement the quote calculation logic
-
-            var insuree = new Insuree
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                Quote = quote
-            };
-
-            _dbContext.Insurees.Add(insuree);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("Index"); // Redirect to the appropriate view
-        }
-
-        // Other controller actions...
-
-        private decimal CalculateInsuranceQuote(InsureeViewModel model)
-        {
-            // Implement the quote calculation logic (as in the previous examples)
-            // ...
-
-            return calculatedQuote;
-        }
+        _context = context;
     }
 
+    public IActionResult Index()
+    {
+        // Add any necessary logic for the Index action
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Insuree insuree)
+    {
+        if (ModelState.IsValid)
+        {
+            decimal quote = 50;
+
+            // ... (add the quote calculation logic here)
+
+            insuree.Quote = quote;
+            _context.Insurees.Add(insuree);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        return View(insuree);
+    }
+
+    public IActionResult Admin()
+    {
+        var allQuotes = _context.Insurees
+            .Select(i => new { i.FirstName, i.LastName, i.Email, i.Quote })
+            .ToList();
+
+        return View(allQuotes);
+    }
 }
